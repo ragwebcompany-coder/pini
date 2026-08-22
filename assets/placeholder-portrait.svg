@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 880" width="800" height="880" role="img" aria-label="Placeholder φωτογραφίας">
+  <rect width="800" height="880" fill="#efe7db"/>
+  <g fill="none" stroke="#b9a894" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="400" cy="378" r="96"/>
+    <path d="M256 596c0-79 64-143 144-143s144 64 144 143"/>
+  </g>
+  <text x="400" y="716" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#7a6e64">Φωτογραφία</text>
+  <text x="400" y="758" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="21" fill="#a2917e" letter-spacing="2">PLACEHOLDER</text>
+</svg>
