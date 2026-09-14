@@ -9,6 +9,25 @@
   "use strict";
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- decorative background video ---- */
+  var video=document.querySelector('.hero-video'), videoToggle=document.querySelector('.video-toggle');
+  if(video){
+    var motionPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
+    function syncVideoButton(){
+      if(!videoToggle)return;
+      videoToggle.setAttribute('aria-pressed',String(video.paused));
+      videoToggle.setAttribute('aria-label',video.paused?'Αναπαραγωγή βίντεο φόντου':'Παύση βίντεο φόντου');
+      videoToggle.innerHTML=video.paused?'Αναπαραγωγή <span aria-hidden="true">▷</span>':'Παύση βίντεο <span aria-hidden="true">Ⅱ</span>';
+    }
+    function applyMotionPreference(){if(motionPreference.matches){video.pause();}else{video.play().catch(syncVideoButton);}}
+    video.muted=true;
+    applyMotionPreference();
+    motionPreference.addEventListener('change',applyMotionPreference);
+    video.addEventListener('play',syncVideoButton);
+    video.addEventListener('pause',syncVideoButton);
+    if(videoToggle)videoToggle.addEventListener('click',function(){if(video.paused){video.play().catch(syncVideoButton);}else{video.pause();}});
+  }
+
   /* ---- year ---- */
   var y = document.getElementById('year'); if(y) y.textContent = new Date().getFullYear();
 
@@ -61,10 +80,19 @@
 
   /* ---- mobile drawer ---- */
   var ham = document.getElementById('hamburger'), ov = document.getElementById('overlay');
-  function toggleMenu(){ document.body.classList.toggle('menu-open'); }
+  function setMenu(open){
+    document.body.classList.toggle('menu-open',open);
+    if(ham){ham.setAttribute('aria-expanded',String(open));ham.setAttribute('aria-label',open?'Κλείσιμο μενού':'Άνοιγμα μενού');}
+  }
+  function toggleMenu(){ setMenu(!document.body.classList.contains('menu-open')); }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){setMenu(false);}});
   if(ham) ham.addEventListener('click', toggleMenu);
   if(ov) ov.addEventListener('click', toggleMenu);
-  document.querySelectorAll('#drawer a').forEach(function(a){ a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); }); });
+  document.querySelectorAll('#drawer a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    if(new URL(a.href).pathname===location.pathname || (location.pathname==='/' && a.getAttribute('href')==='index.html')){a.classList.add('active');a.setAttribute('aria-current','page');}
+  });
 
   /* ---- services accordion ---- */
   document.querySelectorAll('#svcList .svc-row').forEach(function(row){
