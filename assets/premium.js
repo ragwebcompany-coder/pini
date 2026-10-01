@@ -8,6 +8,20 @@
 (function(){
   "use strict";
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EN = document.documentElement.lang === 'en', LOC = EN ? 'en-GB' : 'el-GR';
+  var T = EN ? {
+    play:'Play background video', pause:'Pause background video', playBtn:'Play', pauseBtn:'Pause video',
+    days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    openNow:'Open now', closedNow:'Closed now', closesAt:'Closes at ', today:'today', tomorrow:'tomorrow',
+    opens:function(w,t){ return 'Opens '+(w==='today'||w==='tomorrow'?w:'on '+w)+' at '+t; },
+    call:'Call for an appointment', openToday:'Open today', todayIs:'Today: ', closedToday:'Closed — see opening hours'
+  } : {
+    play:'Αναπαραγωγή βίντεο φόντου', pause:'Παύση βίντεο φόντου', playBtn:'Αναπαραγωγή', pauseBtn:'Παύση βίντεο',
+    days:['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
+    openNow:'Ανοιχτά τώρα', closedNow:'Κλειστά τώρα', closesAt:'Κλείνει στις ', today:'σήμερα', tomorrow:'αύριο',
+    opens:function(w,t){ return 'Ανοίγει '+w+' στις '+t; },
+    call:'Επικοινωνήστε για ραντεβού', openToday:'Ανοιχτά σήμερα', todayIs:'Σήμερα: ', closedToday:'Κλειστά — δείτε ωράριο'
+  };
 
   /* ---- decorative background video ---- */
   var video=document.querySelector('.hero-video'), videoToggle=document.querySelector('.video-toggle');
@@ -16,8 +30,8 @@
     function syncVideoButton(){
       if(!videoToggle)return;
       videoToggle.setAttribute('aria-pressed',String(video.paused));
-      videoToggle.setAttribute('aria-label',video.paused?'Αναπαραγωγή βίντεο φόντου':'Παύση βίντεο φόντου');
-      videoToggle.innerHTML=video.paused?'Αναπαραγωγή <span aria-hidden="true">▷</span>':'Παύση βίντεο <span aria-hidden="true">Ⅱ</span>';
+      videoToggle.setAttribute('aria-label',video.paused?T.play:T.pause);
+      videoToggle.innerHTML=video.paused?T.playBtn+' <span aria-hidden="true">▷</span>':T.pauseBtn+' <span aria-hidden="true">Ⅱ</span>';
     }
     function applyMotionPreference(){if(motionPreference.matches){video.pause();}else{video.play().catch(syncVideoButton);}}
     video.muted=true;
@@ -82,7 +96,7 @@
   var ham = document.getElementById('hamburger'), ov = document.getElementById('overlay');
   function setMenu(open){
     document.body.classList.toggle('menu-open',open);
-    if(ham){ham.setAttribute('aria-expanded',String(open));ham.setAttribute('aria-label',open?'Κλείσιμο μενού':'Άνοιγμα μενού');}
+    if(ham){ham.setAttribute('aria-expanded',String(open));ham.setAttribute('aria-label',open?(EN?'Close menu':'Κλείσιμο μενού'):(EN?'Open menu':'Άνοιγμα μενού'));}
   }
   function toggleMenu(){ setMenu(!document.body.classList.contains('menu-open')); }
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){setMenu(false);}});
@@ -108,12 +122,12 @@
   function countUp(el){
     var target = parseInt(el.getAttribute('data-count'),10);
     var suffix = el.getAttribute('data-suffix')||'';
-    if(reduce){ el.textContent = target.toLocaleString('el-GR')+suffix; return; }
+    if(reduce){ el.textContent = target.toLocaleString(LOC)+suffix; return; }
     var dur=1400, t0=performance.now();
     requestAnimationFrame(function step(now){
       var p = Math.min((now-t0)/dur,1);
       var v = Math.round((1-Math.pow(1-p,3))*target);
-      el.textContent = v.toLocaleString('el-GR')+suffix;
+      el.textContent = v.toLocaleString(LOC)+suffix;
       if(p<1) requestAnimationFrame(step);
     });
   }
@@ -174,7 +188,7 @@
     6:[],                      // Sat
     0:[]                       // Sun
   };
-  var dayNamesGen = ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+  var dayNamesGen = T.days;
   function fmt(m){ var h=Math.floor(m/60), mm=m%60; return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm; }
 
   function nextOpening(now, day, mins){
@@ -195,15 +209,15 @@
 
     var statusText, subText;
     if(openNow){
-      statusText='Ανοιχτά τώρα';
-      subText='Κλείνει στις '+fmt(closesAt);
+      statusText=T.openNow;
+      subText=T.closesAt+fmt(closesAt);
     } else {
-      statusText='Κλειστά τώρα';
+      statusText=T.closedNow;
       var nx=nextOpening(now, day, mins);
       if(nx){
-        var when = nx.same ? 'σήμερα' : (nx.day===(day+1)%7 ? 'αύριο' : dayNamesGen[nx.day]);
-        subText='Ανοίγει '+when+' στις '+fmt(nx.start);
-      } else { subText='Επικοινωνήστε για ραντεβού'; }
+        var when = nx.same ? T.today : (nx.day===(day+1)%7 ? T.tomorrow : dayNamesGen[nx.day]);
+        subText=T.opens(when, fmt(nx.start));
+      } else { subText=T.call; }
     }
 
     var dotA=document.getElementById('dotAside'); if(dotA) dotA.classList.toggle('on', openNow);
@@ -218,17 +232,17 @@
     // contact today line
     var ct=document.getElementById('contactToday'), ch=document.getElementById('contactHours');
     if(ct&&ch){
-      ct.textContent = (openNow?'Ανοιχτά σήμερα':'Σήμερα: '+dayNamesGen[day]);
+      ct.textContent = (openNow?T.openToday:T.todayIs+dayNamesGen[day]);
       var todays=schedule[day];
-      ch.textContent = todays.length ? todays.map(function(s){return fmt(s[0])+'–'+fmt(s[1]);}).join(' · ') : 'Κλειστά — δείτε ωράριο';
+      ch.textContent = todays.length ? todays.map(function(s){return fmt(s[0])+'–'+fmt(s[1]);}).join(' · ') : T.closedToday;
     }
   }
 
   function tickClock(){
     var now=new Date();
     var lc=document.getElementById('liveClock'), ld=document.getElementById('liveDate');
-    if(lc) lc.textContent = now.toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'});
-    if(ld) ld.textContent = now.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'});
+    if(lc) lc.textContent = now.toLocaleTimeString(LOC,{hour:'2-digit',minute:'2-digit'});
+    if(ld) ld.textContent = now.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long'});
   }
   refreshStatus(); tickClock();
   setInterval(tickClock,1000);

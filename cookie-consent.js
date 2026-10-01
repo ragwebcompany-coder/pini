@@ -14,11 +14,30 @@
 (function(){
   "use strict";
   var KEY = "clinic_cookie_consent", VER = 1;
-  var CATS = [
-    {id:"functional", label:"Λειτουργικά", desc:"Απομνημόνευση προτιμήσεων & ενσωματώσεις (π.χ. χάρτης)."},
-    {id:"statistics", label:"Στατιστικά", desc:"Ανώνυμη μέτρηση επισκεψιμότητας."},
-    {id:"marketing",  label:"Marketing",  desc:"Στοχευμένο περιεχόμενο / διαφήμιση."}
-  ];
+  var T = document.documentElement.lang === 'en' ? {
+    functional:["Functional","Remembering your preferences and embedded content."],
+    statistics:["Statistics","Anonymous visitor measurement."],
+    marketing:["Marketing","Targeted content / advertising."],
+    ph:"This content requires third-party cookies.", enable:"Enable",
+    dialog:"Cookie settings", title:"We respect your privacy",
+    body:"We use necessary cookies to run this website and, with your consent, cookies for functionality, statistics and marketing. See our ",
+    cookies:"Cookie Policy", and:" and ", privacy:"Privacy Policy",
+    necessary:"Necessary", necessaryDesc:"Always on — required for the site to work.",
+    all:"Accept all", reject:"Reject", save:"Save choices", customise:"Customise", hide:"Hide options"
+  } : {
+    functional:["Λειτουργικά","Απομνημόνευση προτιμήσεων & ενσωματώσεις."],
+    statistics:["Στατιστικά","Ανώνυμη μέτρηση επισκεψιμότητας."],
+    marketing:["Marketing","Στοχευμένο περιεχόμενο / διαφήμιση."],
+    ph:"Το περιεχόμενο αυτό απαιτεί cookies τρίτων.", enable:"Ενεργοποίηση",
+    dialog:"Ρυθμίσεις cookies", title:"Σεβόμαστε το απόρρητό σας",
+    body:"Χρησιμοποιούμε αναγκαία cookies για τη λειτουργία του ιστοτόπου και — με τη συγκατάθεσή σας — cookies για λειτουργικότητα, στατιστικά και marketing. Δείτε την ",
+    cookies:"Πολιτική Cookies", and:" και την ", privacy:"Πολιτική Απορρήτου",
+    necessary:"Αναγκαία", necessaryDesc:"Πάντα ενεργά — απαραίτητα για τη βασική λειτουργία.",
+    all:"Αποδοχή όλων", reject:"Απόρριψη", save:"Αποθήκευση επιλογών", customise:"Προσαρμογή επιλογών", hide:"Απόκρυψη επιλογών"
+  };
+  var CATS = ["functional","statistics","marketing"].map(function(id){
+    return {id:id, label:T[id][0], desc:T[id][1]};
+  });
 
   function read(){
     try{ var v = JSON.parse(localStorage.getItem(KEY)); return (v && v._v===VER) ? v : null; }
@@ -92,8 +111,8 @@
     var p = el.parentNode; if(!p || p.querySelector('.cc-ph')) return;
     if(getComputedStyle(p).position === 'static') p.style.position='relative';
     var d = document.createElement('div'); d.className='cc-ph';
-    d.innerHTML = '<div><p>Το περιεχόμενο αυτό (π.χ. Google Maps) απαιτεί cookies τρίτων.</p>'+
-                  '<button type="button" class="cc-ph-btn">Ενεργοποίηση</button></div>';
+    d.innerHTML = '<div><p>'+T.ph+'</p>'+
+                  '<button type="button" class="cc-ph-btn">'+T.enable+'</button></div>';
     d.querySelector('.cc-ph-btn').addEventListener('click', openSettings);
     p.appendChild(d);
   }
@@ -116,23 +135,22 @@
     }).join('');
     root.innerHTML =
       '<div class="cc-overlay" data-cc-close></div>'+
-      '<div class="cc-card" role="dialog" aria-label="Ρυθμίσεις cookies">'+
-        '<h2>🍪 Σεβόμαστε το απόρρητό σας</h2>'+
-        '<p>Χρησιμοποιούμε αναγκαία cookies για τη λειτουργία του ιστοτόπου και — με τη συγκατάθεσή σας — '+
-          'cookies για λειτουργικότητα, στατιστικά και marketing. Δείτε την '+
-          '<a href="legal/cookies.html">Πολιτική Cookies</a> και την '+
-          '<a href="legal/privacy.html">Πολιτική Απορρήτου</a>.</p>'+
+      '<div class="cc-card" role="dialog" aria-label="'+T.dialog+'">'+
+        '<h2>🍪 '+T.title+'</h2>'+
+        '<p>'+T.body+
+          '<a href="/legal/cookies.html">'+T.cookies+'</a>'+T.and+
+          '<a href="/legal/privacy.html">'+T.privacy+'</a>.</p>'+
         '<div class="cc-prefs">'+
-          '<div class="cc-row"><div class="t"><b>Αναγκαία</b><span>Πάντα ενεργά — απαραίτητα για τη βασική λειτουργία.</span></div>'+
+          '<div class="cc-row"><div class="t"><b>'+T.necessary+'</b><span>'+T.necessaryDesc+'</span></div>'+
             '<label class="cc-sw"><input type="checkbox" checked disabled><span class="cc-sl"></span></label></div>'+
           rows+
         '</div>'+
         '<div class="cc-actions">'+
-          '<button type="button" class="cc-btn primary" data-cc="all">Αποδοχή όλων</button>'+
-          '<button type="button" class="cc-btn ghost" data-cc="reject">Απόρριψη</button>'+
-          '<button type="button" class="cc-btn ghost" data-cc="save" style="display:none">Αποθήκευση επιλογών</button>'+
+          '<button type="button" class="cc-btn primary" data-cc="all">'+T.all+'</button>'+
+          '<button type="button" class="cc-btn ghost" data-cc="reject">'+T.reject+'</button>'+
+          '<button type="button" class="cc-btn ghost" data-cc="save" style="display:none">'+T.save+'</button>'+
         '</div>'+
-        '<div style="text-align:center;margin-top:8px"><button type="button" class="cc-link" data-cc="toggle">Προσαρμογή επιλογών</button></div>'+
+        '<div style="text-align:center;margin-top:8px"><button type="button" class="cc-link" data-cc="toggle">'+T.customise+'</button></div>'+
       '</div>';
     document.body.appendChild(root);
 
@@ -155,7 +173,7 @@
     root.querySelector('[data-cc="all"]').style.display = '';
     root.querySelector('[data-cc="reject"]').style.display = prefsOn ? 'none' : '';
     root.querySelector('[data-cc="save"]').style.display = prefsOn ? '' : 'none';
-    root.querySelector('[data-cc="toggle"]').textContent = prefsOn ? 'Απόκρυψη επιλογών' : 'Προσαρμογή επιλογών';
+    root.querySelector('[data-cc="toggle"]').textContent = prefsOn ? T.hide : T.customise;
   }
 
   function decide(all){
