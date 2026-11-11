@@ -556,7 +556,7 @@ body.menu-open .topbar{z-index:160;}
 
 /* Hero: crossfading photo slider (no food imagery). */
 .hero-slider{position:absolute;inset:0;z-index:0;overflow:hidden;background:#fff}
-.hero-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 28%;opacity:0;animation:heroFade 18s infinite}
+.hero-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 36%;opacity:0;animation:heroFade 18s infinite}
 .hero-slider img:nth-child(1){animation-delay:0s}
 .hero-slider img:nth-child(2){animation-delay:6s;object-position:75% 25%}
 .hero-slider img:nth-child(3){animation-delay:12s;object-position:80% center}
