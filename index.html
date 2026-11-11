@@ -34,7 +34,7 @@
 <style>
   :root{
     --accent:#1f5a52;--accent-deep:#163f39;--gold:#c08a3e;
-    --hero-bg:url('/assets/healthy-breakfast.jpg');
+    --hero-bg:none;
   }
   .cb-credit{margin-top:14px;font-size:.8rem;text-align:center;opacity:.7}
   .cb-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
@@ -130,10 +130,11 @@
 
 <main id="top">
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/healthy-food-steady-poster.jpg" aria-hidden="true" tabindex="-1">
-    <source src="assets/healthy-food-smooth.mp4" type="video/mp4" />
-  </video>
-  <button class="video-toggle" type="button" aria-label="Παύση βίντεο φόντου" aria-pressed="false">Παύση βίντεο <span aria-hidden="true">Ⅱ</span></button>
+  <div class="hero-slider" aria-hidden="true">
+    <img src="assets/pini-office-nov2026.jpg" alt="" width="1058" height="1400" fetchpriority="high" />
+    <img src="assets/pini-home-sept2026.jpg" alt="" width="1552" height="1600" loading="lazy" />
+    <img src="assets/pini-services-sept2026.jpg" alt="" width="1600" height="1029" loading="lazy" />
+  </div>
   <div class="shell">
     <div class="hero-text">
       <img class="hero-logo" src="assets/life-beyond-diets-logo.png" width="900" height="603" alt="Life Beyond Diets — Clinical Nutrition &amp; Wellness by Pinelopi Pini" />
@@ -150,7 +151,7 @@
         </a>
         <a class="btn ghost" href="#approach">Η προσέγγιση Non-Diet</a>
       </div>
-      <img class="hero-mobile-art" src="assets/healthy-breakfast.jpg" alt="Φρέσκα φρούτα και γιαούρτι σε ένα φωτεινό πρωινό τραπέζι" width="1536" height="1024" />
+      <img class="hero-mobile-art" src="assets/pini-office-nov2026.jpg" alt="Η Πηνελόπη Πίνη στο γραφείο της" width="1058" height="1400" />
     </div>
   </div>
   <div class="ecg-wrap">

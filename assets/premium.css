@@ -553,3 +553,13 @@ body.menu-open .topbar{z-index:160;}
 
 /* Life Beyond Diets PP monogram in the brand slot (Nov 2026) */
 .brand-mark img{height:100%;width:100%;object-fit:contain;display:block}
+
+/* Hero: crossfading photo slider (no food imagery). */
+.hero-slider{position:absolute;inset:0;z-index:0;overflow:hidden;background:#fff}
+.hero-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 28%;opacity:0;animation:heroFade 18s infinite}
+.hero-slider img:nth-child(1){animation-delay:0s}
+.hero-slider img:nth-child(2){animation-delay:6s;object-position:75% 25%}
+.hero-slider img:nth-child(3){animation-delay:12s;object-position:80% center}
+@keyframes heroFade{0%{opacity:0}5%,33%{opacity:1}38%,100%{opacity:0}}
+@media(max-width:560px){.hero-mobile-art{object-position:50% 25%}}
+@media(prefers-reduced-motion:reduce){.hero-slider img{animation:none;opacity:0}.hero-slider img:first-child{opacity:1}}
