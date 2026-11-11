@@ -550,3 +550,6 @@ body.menu-open .topbar{z-index:160;}
 .lang-switch{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:500;letter-spacing:.06em;color:var(--accent);transition:border-color .25s ease,background .25s ease}
 .lang-switch:hover{border-color:var(--accent);background:rgba(31,90,82,.06)}
 @media(max-width:560px){.lang-switch{height:30px;min-width:34px;padding:0 8px;font-size:11px;margin-right:4px}}
+
+/* Life Beyond Diets PP monogram in the brand slot (Nov 2026) */
+.brand-mark img{height:100%;width:100%;object-fit:contain;display:block}
