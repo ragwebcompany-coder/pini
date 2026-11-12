@@ -554,12 +554,11 @@ body.menu-open .topbar{z-index:160;}
 /* Life Beyond Diets PP monogram in the brand slot (Nov 2026) */
 .brand-mark img{height:100%;width:100%;object-fit:contain;display:block}
 
-/* Hero: crossfading photo slider (no food imagery). */
-.hero-slider{position:absolute;inset:0;z-index:0;overflow:hidden;background:#fff}
-.hero-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% 36%;opacity:0;animation:heroFade 18s infinite}
-.hero-slider img:nth-child(1){animation-delay:0s}
-.hero-slider img:nth-child(2){animation-delay:6s;object-position:75% 25%}
-.hero-slider img:nth-child(3){animation-delay:12s;object-position:80% center}
-@keyframes heroFade{0%{opacity:0}5%,33%{opacity:1}38%,100%{opacity:0}}
-@media(max-width:560px){.hero-mobile-art{object-position:50% 25%}}
-@media(prefers-reduced-motion:reduce){.hero-slider img{animation:none;opacity:0}.hero-slider img:first-child{opacity:1}}
+/* Hero: single photo, shown whole (no crop / zoom). */
+.hero-photo{position:absolute;z-index:0;right:clamp(16px,5vw,96px);bottom:0;height:min(88%,1195px);width:auto;max-width:48%;object-fit:contain;object-position:right bottom}
+.home-page .hero::before{background:linear-gradient(100deg,#fff 0%,rgba(255,255,255,.9) 40%,rgba(255,255,255,0) 58%)}
+@media(max-width:1000px){
+  .hero-photo{display:none}
+  .home-page .hero::before{display:none}
+  .hero-mobile-art{display:block;width:100%;max-width:420px;height:auto;aspect-ratio:896/1195;object-fit:contain;margin:28px auto 0;border-radius:18px}
+}
