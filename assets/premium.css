@@ -560,5 +560,5 @@ body.menu-open .topbar{z-index:160;}
 @media(max-width:1000px){
   .hero-photo{display:none}
   .home-page .hero::before{display:none}
-  .hero-mobile-art{display:block;width:100%;max-width:420px;height:auto;aspect-ratio:896/1195;object-fit:contain;margin:28px auto 0;border-radius:18px}
+  .hero-mobile-art{display:block;width:100%;max-width:420px;height:auto;aspect-ratio:3/4;object-fit:contain;margin:28px auto 0;border-radius:18px}
 }
